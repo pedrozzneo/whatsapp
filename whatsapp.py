@@ -26,7 +26,18 @@ def set_driver():
 
     return webdriver.Chrome(options=chrome_options)
 
+def search(filter):
+    try:
+        search_field = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, 'p.selectable-text.copyable-text.x15bjb6t.x1n2onr6')))
+        search_field.clear()
+        search_field.send_keys(filter)
+        time.sleep(5)
+    except Exception as e:
+        print(f"Error searching: {str(e)}")
+
+# Set chrome driver
 driver = set_driver()
+
 # Open whatsapp
 driver.get("https://web.whatsapp.com")
 
@@ -34,19 +45,7 @@ driver.get("https://web.whatsapp.com")
 wait = WebDriverWait(driver, 30)
 
 # Filter "lista de transmissao" contacts
-try:
-    # Find the search bar
-    search_field = wait.until(EC.presence_of_element_located((
-        By.CSS_SELECTOR, 'p.selectable-text.copyable-text.x15bjb6t.x1n2onr6'
-    )))
-
-    # Enter the filter and search it
-    filter = "lista"
-    search_field.click()
-    search_field.send_keys(filter)
-    time.sleep(5)
-except TimeoutException:
-    print("Search field not found within the given time.")
+search("lista")
 
 # Build the list of "lista" contacts
 try:
