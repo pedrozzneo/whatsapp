@@ -70,6 +70,7 @@ def search(driver):
 
 def scroll_inside_div_js(driver):
     # Find the div element
+    #I NEED TO CHANGE IT SO EXACTLY WHEN THE ELEMENT GOES STALE TO GET NEW ONES PERHAPS
     div_element = driver.find_element(By.ID, "pane-side")
     scroll_amount=500
     num_scrolls=1
