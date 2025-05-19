@@ -26,7 +26,7 @@ def set_driver():
 
     return webdriver.Chrome(options=chrome_options)
 
-def filter(filter):
+def search(filter):
     try:
         search_field = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, 'p.selectable-text.copyable-text.x15bjb6t.x1n2onr6')))
         search_field.clear()
@@ -35,17 +35,15 @@ def filter(filter):
     except Exception as e:
         print(f"Error searching: {str(e)}")
 
-def search(driver):
+def build_list(driver):
     names_array = []
     i = 2
     while True:
         try:
             # Try to find element at current index
-            xpath = f"(//div[@class='x10l6tqk xh8yej3 x1g42fcv'])[{i}]"
-            element = driver.find_element(By.XPATH, xpath)
+            element = driver.find_element(By.XPATH, f"(//div[@class='x10l6tqk xh8yej3 x1g42fcv'])[{i}]")
             # Get only the first line of text
             element_text = element.text.split('\n')[0].strip()
-            print(element_text)
             names_array.append(element_text)
 
             # Check for stop conditions
@@ -65,14 +63,14 @@ def search(driver):
             print(f"Error at index {i}: {str(e)}")
             break
             
-    print(f"Found {i - 2} names:")
+    print(f"Found {i} names:")
     return names_array
 
 def scroll_inside_div_js(driver):
     # Find the div element
     #I NEED TO CHANGE IT SO EXACTLY WHEN THE ELEMENT GOES STALE TO GET NEW ONES PERHAPS
     div_element = driver.find_element(By.ID, "pane-side")
-    scroll_amount=500
+    scroll_amount=1550
     num_scrolls=1
 
     for _ in range(num_scrolls):
@@ -81,31 +79,51 @@ def scroll_inside_div_js(driver):
             div_element,
             scroll_amount
         )
-        time.sleep(0.1)  # Add a small delay between scrolls
+        time.sleep(1)  # Add a small delay between scrolls
 
 # Set chrome driver and open whatsapp
 driver = set_driver()
 driver.get("https://web.whatsapp.com")
-
+time.sleep(20)
 # Set up the wait time for EC
 wait = WebDriverWait(driver, 30)
 
 # filter "lista" contacts
-filter("fibra")
+search("fibra")
+time.sleep(1)
 
-# Build the list of "lista" contacts
-names_array = []
-names_array.append(search(driver))
-print(names_array)   
+final_names_array = []
+i = 0
+while i < 20:
+    i = i + 1
+    # Build the list of "lista" contacts
+    scroll_inside_div_js(driver)  # Scrolls down one "tick"
+    final_names_array.append(build_list(driver))   
 
-scroll_inside_div_js(driver)  # Scrolls down one "tick"
-time.sleep(5)
-names_array.append(search(driver))
-print(names_array)   
-time.sleep(60)
+
+for array in final_names_array:
+    print(array)
+    print("\n")
+
+previous_array = []
+i = 1
+for array in final_names_array:
+    if previous_array:
+        position = -1
+        for prev in previous_array:
+            position += 1
+            if array[0] == prev:
+                print(f"{i} - Match found at position: {position}")
+                position += 1
+                continue
+    i = i + 1
+    previous_array = array
+
+driver.quit()
 
 
 #     element.click()
-#     ActionChains(driver).send_keys("ignora essa mensagem, eh teste kkkkkk").perform()
+#     ActionChains(driver).send_
+# keys("ignora essa mensagem, eh teste kkkkkk").perform()
 #     ActionChains(driver).send_keys(Keys.RETURN).perform()        
 #     time.sleep(2)      
