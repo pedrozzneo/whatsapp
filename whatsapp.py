@@ -5,7 +5,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 import os
 import time
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 
@@ -56,9 +55,6 @@ def build_list(driver):
             #     names_array.append(element_text)
                 
             i += 1
-        except NoSuchElementException:
-            print(f"No more elements found after index {i}")
-            break
         except Exception as e:
             print(f"Error at index {i}: {str(e)}")
             break
