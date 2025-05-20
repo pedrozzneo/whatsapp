@@ -7,6 +7,7 @@ import os
 import time
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
+import driver
 
 def set_driver():
     # Create chrome options object
@@ -78,7 +79,7 @@ def scroll_inside_div_js(driver):
         time.sleep(1)  # Add a small delay between scrolls
 
 # Set chrome driver and open whatsapp
-driver = set_driver()
+driver = driver.set()
 driver.get("https://web.whatsapp.com")
 time.sleep(20)
 # Set up the wait time for EC
