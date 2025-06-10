@@ -29,3 +29,22 @@ def scroll_inside_div_js(driver, scroll_amount):
         print("✅ scrolled down")
     except:
         print("❌ scrolled down")
+
+def show(addedContacts, removedContacts, errors):
+    # Show the added contacts collected
+    print(f"\n list of contacts added: \n")
+    for i, contact in enumerate(addedContacts, start=1):
+        print(f"{i}: {contact}")
+
+    # Show the deleted collected 
+    print(f"\n list of contacts removed: \n")
+    for i, contact in enumerate(removedContacts, start=1):
+        print(f"{i}: {contact}")
+
+    # Show the errors collected
+    if errors:
+        print(f"\n list of errors: \n")
+        for error in errors:
+            print(error)
+    else:
+        print("\n No errors found. \n")

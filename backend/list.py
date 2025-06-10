@@ -24,8 +24,7 @@ def message(driver, addedContacts):
             print("select chat")
             
             # Make the input field empty
-            ActionChains(driver).key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).perform()
-            #ActionChains(driver).send_keys(Keys.BACKSPACE * 150).perform()
+            ActionChains(driver).key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).send_keys(Keys.BACKSPACE).perform()
 
             # Select a picture on the chat
             ActionChains(driver).key_down(Keys.CONTROL).send_keys("v").key_up(Keys.CONTROL).perform()
@@ -35,6 +34,7 @@ def message(driver, addedContacts):
             send_button = WebDriverWait(driver, 30).until(
                 EC.element_to_be_clickable((By.CSS_SELECTOR, 'div[aria-label="Send"]'))
             )
+            #send_button.click()
             print("send button click")
 
             # Type the message in the input field
@@ -54,25 +54,6 @@ def message(driver, addedContacts):
             # Re-add the contact to the list for retry
             addedContacts.append(contact) 
             continue
-
-def show(addedContacts, removedContacts, errors):
-    # Show the added contacts collected
-    print(f"\n list of contacts added: \n")
-    for i, contact in enumerate(addedContacts, start=1):
-        print(f"{i}: {contact}")
-
-    # Show the deleted collected 
-    print(f"\n list of contacts removed: \n")
-    for i, contact in enumerate(removedContacts, start=1):
-        print(f"{i}: {contact}")
-
-    # Show the errors collected
-    if errors:
-        print(f"\n list of errors: \n")
-        for error in errors:
-            print(error)
-    else:
-        print("\n No errors found. \n")
 
 def build(driver):
     addedContacts = []
@@ -119,42 +100,6 @@ def build(driver):
             if name not in addedContacts:
                 addedContacts.append(name)    
         
-        # for i in range(1, 25):
-        #     try:
-        #         print(f"searching for element of index {i}")
-        #         # Find the WebElement reference of the contact
-        #         element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, f"(//div[@class='x10l6tqk xh8yej3 x1g42fcv'])[{i}]")))
-                
-        #         # Extract its name
-        #         name = element.text.split('\n')[0].strip()
-                
-        #         # Check for stop condition
-        #         if name == "MESSAGES":
-        #             # Signalize the end of the loop
-        #             end = True
-        #             break
-
-        #         # Check if the contact should not be added
-        #         if "excluir" in name.lower() or name == "CONTACTS":
-        #             # Show the contact that will be skipped
-        #             print(f"skipping contact: {name}")
-
-        #             # Add the contact to the removed contacts array for further check
-        #             removedContacts.append(name)
-        #             continue
-                
-        #         # Output the contact that will be added
-        #         print(f"adding contact: {name}")
-
-        #         # Add the contact to the array only if its new
-        #         if name not in addedContacts:
-        #             addedContacts.append(name)    
-        #     except Exception as e:
-        #         print(f"❌ error with element of index {i}: {str(e)}")
-        #         time.sleep(20)
-        #         errors.append(f"error {str(e)}")
-
-        #end = True
         # Quit the loop
         if end:
             print("End of contacts reached.")
