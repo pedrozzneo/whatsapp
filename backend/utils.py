@@ -30,7 +30,7 @@ def scroll_inside_div_js(driver, scroll_amount):
     except:
         print("❌ scrolled down")
 
-def show(addedContacts, removedContacts, errors):
+def show(addedContacts, removedContacts, errors, equalNames):
     # Show the added contacts collected
     print(f"\n list of contacts added: \n")
     for i, contact in enumerate(addedContacts, start=1):
@@ -48,3 +48,12 @@ def show(addedContacts, removedContacts, errors):
             print(error)
     else:
         print("\n No errors found. \n")
+
+    if equalNames:
+        print(f"\n list of equal names: \n")
+        for name in equalNames:
+            print(name)
+    else:
+        print("\n No equal names. \n")
+
+    

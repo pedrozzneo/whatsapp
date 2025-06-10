@@ -16,8 +16,10 @@ while not success:
     except:
         continue
 
+time.sleep(500)
+
 # Build all the lists
-addedContacts, removedContacts, errors = list.build(driver)
+addedContacts, removedContacts, errors, equalNames= list.build(driver)
 
 answer = input("wanna start from a specific contact? ")
 if answer == "y":
@@ -25,9 +27,7 @@ if answer == "y":
     addedContacts = list.filter(addedContacts, contact)
 
 # Print them
-utils.show(addedContacts, removedContacts, errors)
-
-
+utils.show(addedContacts, removedContacts, errors, equalNames)
 
 # message each contact
 list.message(driver, addedContacts)  
