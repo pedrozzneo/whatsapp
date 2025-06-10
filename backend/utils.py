@@ -2,25 +2,30 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
 import time
-
-def clear_search_field(driver):
-    try:
-        search_field = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'p.selectable-text.copyable-text.x15bjb6t.x1n2onr6')))
-        search_field.send_keys(Keys.BACKSPACE * 50)  # Clear the search field
-    except Exception as e:
-        print(f"Error clearing search field: {str(e)}")
 
 def search(filter, driver):
     try:
-        search_field = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'p.selectable-text.copyable-text.x15bjb6t.x1n2onr6')))
-        search_field.send_keys(filter)
-    except Exception as e:
-        print(f"Error searching: {str(e)}")
+        # Find and select the search field 
+        search_field = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '//div[@class="x1hx0egp x6ikm8r x1odjw0f x6prxxf x1k6rcq7 x1whj5v"]')))
+        search_field.click()
+    
+        # Clear the search field and type the filter
+        ActionChains(driver).key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).perform()
+        search_field.send_keys(Keys.BACKSPACE + filter) 
+        print(f"\n ✅ Search {filter}")
+    except:
+        print(f"\n ❌ Search {filter}")
+        raise
 
 def scroll_inside_div_js(driver, scroll_amount):
-    # Find the div element
-    div_element = driver.find_element(By.ID, "pane-side")
+    try:
+        # Find the div element that will be scrolled
+        div_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.ID, "pane-side")))
 
-    driver.execute_script("arguments[0].scrollTop += arguments[1];",div_element,scroll_amount)
-    time.sleep(1)  # Add a small delay between scrolls
+        # scroll
+        driver.execute_script("arguments[0].scrollTop += arguments[1];",div_element,scroll_amount)
+        print("✅ scrolled down")
+    except:
+        print("❌ scrolled down")
