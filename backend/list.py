@@ -6,6 +6,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 
+def filter(addedContacts, filter):
+    while True:
+        contact = addedContacts.pop(0)
+        if contact == filter:
+            return addedContacts
+
 def message(driver, addedContacts):
     i = 0
     while addedContacts != []:
@@ -59,6 +65,7 @@ def build(driver):
     addedContacts = []
     removedContacts = []
     errors = []
+    groupCount = 0
 
     # variable that determines the end of the loop
     end = False
@@ -70,13 +77,24 @@ def build(driver):
     utils.scroll_inside_div_js(driver, 243)
 
     while not end:
-        # The list is loaded each 25 itens because of page size
-        group = WebDriverWait(driver, 30).until(EC.presence_of_all_elements_located((By.XPATH, "(//div[@class='x10l6tqk xh8yej3 x1g42fcv'])")))
-        
+        groupCount += 1
+        print(f"\ncollecting contacts from the {groupCount} group... \n")
+        try:
+            # The list is loaded each 25 itens because of page size
+            group = WebDriverWait(driver, 30).until(EC.presence_of_all_elements_located((By.XPATH, "(//div[@class='x10l6tqk xh8yej3 x1g42fcv'])")))
+            print(f"size of the group: {len(group)}")
+        except Exception as e:
+            print(f"unable to find a group of contacts {str(e)}")
+            errors.append("unable to find a group of contacts")
         # Transfer the names of the group to the array
         for i in range(0,24):
-            name = group[i].text.split('\n')[0].strip()
-                
+            try:
+                name = group[i].text.split('\n')[0].strip()
+            except:
+                print("unable to interact with contact")
+                errors.append("unable to interact with contact")
+                continue
+
             # Check for stop condition
             if name == "MESSAGES":
                 # Signalize the end of the loop

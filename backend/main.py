@@ -3,13 +3,6 @@ import driver as d
 import utils
 import list
 
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
-import time
-
 # Set chrome driver and open whatsapp
 driver = d.set()
 driver.get("https://web.whatsapp.com")
@@ -26,8 +19,15 @@ while not success:
 # Build all the lists
 addedContacts, removedContacts, errors = list.build(driver)
 
+answer = input("wanna start from a specific contact? ")
+if answer == "y":
+    contact = input("enter the exact name of the contact: ")
+    addedContacts = list.filter(addedContacts, contact)
+
 # Print them
 utils.show(addedContacts, removedContacts, errors)
+
+
 
 # message each contact
 list.message(driver, addedContacts)  
