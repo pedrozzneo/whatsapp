@@ -11,7 +11,6 @@ time.sleep(10)
 
 # filter "lista" contacts
 utils.search("fibra", driver)
-
 # Build the all the lists
 addedContacts, removedContacts, errors = list.build(driver)
 
@@ -19,7 +18,7 @@ addedContacts, removedContacts, errors = list.build(driver)
 list.show(addedContacts, removedContacts, errors)
 
 # message each contact
-list.message(driver, addedContacts)
+#list.message(driver, addedContacts)
  
 
 #ActionChains(driver).send_keys(Keys.RETURN).perform()     

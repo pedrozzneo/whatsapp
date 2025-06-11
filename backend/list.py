@@ -59,9 +59,11 @@ def build(driver):
     # Scrolls to fit perfectly the "lista" contacts
     utils.scroll_inside_div_js(driver, 243)
 
+    counter = 0
+
     while not end:
         # The list is loaded each 25 itens because of page size
-        for i in range(1, 25):
+        for i in range(1, 16):
             try:
                 # Find the WebElement reference of the contact
                 element = driver.find_element(By.XPATH, f"(//div[@class='x10l6tqk xh8yej3 x1g42fcv'])[{i}]")
@@ -70,8 +72,13 @@ def build(driver):
                 name = element.text.split('\n')[0].strip()
                 
                 # Check for stop condition
-                if name == "MESSAGES":
+                if name == "mensagens":
                     # Signalize the end of the loop
+                    end = True
+                    break
+                
+                print(counter)
+                if counter == 1500:
                     end = True
                     break
 
@@ -89,7 +96,8 @@ def build(driver):
 
                 # Add the contact to the array only if its new
                 if name not in addedContacts:
-                    addedContacts.append(name)     
+                    addedContacts.append(name) 
+                    counter += 1    
 
             except Exception as e:
                 print(f"error {e}")
@@ -104,7 +112,8 @@ def build(driver):
         utils.scroll_inside_div_js(driver, scroll_amount)
         
         # for the second iteration and on, thats the scroll amount
-        scroll_amount= 72 * 24
+        #scroll_amount= 72 * 24
+        scroll_amount= 72 * 15
 
     # Remove the first element which is "CHATS"
     addedContacts.pop(0) 
