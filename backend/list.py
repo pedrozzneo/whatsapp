@@ -84,7 +84,7 @@ def build(driver):
     end = False
 
     # The scroll amount only for the first iteration
-    scroll_amount= 72 * 27 
+    #scroll_amount= 72 * 27 
 
     # Scrolls to fit perfectly the "lista" contacts
     utils.scroll_inside_div_js(driver, 243)
@@ -98,13 +98,14 @@ def build(driver):
 
             # The list is loaded each 25 itens because of page size
             group = WebDriverWait(driver, 30).until(EC.presence_of_all_elements_located((By.XPATH, "(//div[@class='x10l6tqk xh8yej3 x1g42fcv'])")))
-            print(f"size of the group: {len(group)}")
+            contactsAmount = len(group)
+            print(f"contacts in this group: {contactsAmount}")
         except Exception as e:
             print(f" ❌ unable to find a group of contacts {str(e)}")
             errors.append("unable to find a group of contacts")
         
         # Transfer the names of the group to the array
-        for i in range(0,24):
+        for i in range(0,(contactsAmount - 1)):
             try:
                 name = group[i].text.split('\n')[0].strip()
             except:
@@ -122,7 +123,7 @@ def build(driver):
             # Check if the contact should not be added
             if "excluir" in name.lower() or name == "CONTACTS" or name == "CHATS":
                 # Show the contact that will be skipped
-                print(f"skipping contact: {name}")
+                print(f"{i} - skipping contact: {name}")
 
                 # Add the contact to the removed contacts array for further check
                 removedContacts.append(name)
@@ -131,10 +132,10 @@ def build(driver):
             # Add the contact to the array only if its new
             if name not in addedContacts:
                 addedContacts.append(name)    
-                print(f" {name} added")
+                print(f" {i} - {name} added")
             else:
                 equalNames.append(name)
-                print(f" {name} already on list")
+                print(f" {i} - {name} already on list")
 
         # Quit the loop
         if end:
@@ -142,6 +143,12 @@ def build(driver):
             break
 
         # Get ready for the next iteration
+        if groupCount == 1:
+            #scroll_amount = 72 * (contactsAmount + 2)
+            scroll_amount = 72 * (contactsAmount + 1) # Repeat
+        else:
+            #scroll_amount = 72 * (contactsAmount - 1)
+            scroll_amount = 72 * (contactsAmount - 2) # Repeat
         utils.scroll_inside_div_js(driver, scroll_amount)
 
         # Wait for the DOM to make this instance stale, giving room for the new one
@@ -149,6 +156,6 @@ def build(driver):
         print("Old group become stale, looking for new one...")
 
         # for the second iteration and on, thats the scroll amount
-        scroll_amount= 72 * 24
+        #scroll_amount= 72 * 24
 
     return addedContacts, removedContacts, errors, equalNames

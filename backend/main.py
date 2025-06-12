@@ -16,7 +16,7 @@ while not success:
     except:
         continue
 
-time.sleep(500)
+time.sleep(10)
 
 # Build all the lists
 addedContacts, removedContacts, errors, equalNames= list.build(driver)
@@ -30,4 +30,4 @@ if answer == "y":
 utils.show(addedContacts, removedContacts, errors, equalNames)
 
 # message each contact
-list.message(driver, addedContacts)  
+#list.message(driver, addedContacts)  
