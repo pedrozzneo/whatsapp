@@ -45,8 +45,8 @@ def message(driver, addedContacts):
             ActionChains(driver).key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).send_keys(Keys.BACKSPACE).perform()
 
             # Select a picture on the chat
-            # ActionChains(driver).key_down(Keys.CONTROL).send_keys("v").key_up(Keys.CONTROL).perform()
-            # print("prepare the picture")
+            ActionChains(driver).key_down(Keys.CONTROL).send_keys("v").key_up(Keys.CONTROL).perform()
+            print("prepare the picture")
 
             # Click the send button
             # send_button = WebDriverWait(driver, 30).until(
@@ -56,8 +56,8 @@ def message(driver, addedContacts):
             # print("send button click")
 
             #Type the message in the input field
-            message = "Bom dia!! Tudo bem? Estamos com condições especiais nas fibras, gostaria de saber mais?"
-            ActionChains(driver).send_keys(message).perform()
+            # message = "Bom dia!! Tudo bem? Estamos com condições especiais nas fibras, gostaria de saber mais?"
+            # ActionChains(driver).send_keys(message).perform()
 
             #Send the message
             #ActionChains(driver).send_keys(Keys.RETURN).perform()
@@ -67,7 +67,7 @@ def message(driver, addedContacts):
             print(f"message contact {contact} - {i} succeded, there are {len(addedContacts)} left")
         except:
             # Log the error
-            print(f"Error messaging contact: {contact}")
+            print(f"❌ Error messaging contact: {contact}")
 
             # Re-add the contact to the list for retry
             addedContacts.append(contact) 
@@ -79,15 +79,14 @@ def build(driver):
     errors = []
     equalNames = []
     groupCount = 0
+    validGroup = None
 
     # variable that determines the end of the loop
     end = False
 
-    # The scroll amount only for the first iteration
-    #scroll_amount= 72 * 27 
-
     # Scrolls to fit perfectly the "lista" contacts
-    utils.scroll_inside_div_js(driver, 243)
+    #utils.scroll_inside_div_js(driver, 243)
+    utils.scroll_inside_div_js(driver, 459)
 
     while not end:
         # Find the group of contacts
@@ -96,8 +95,10 @@ def build(driver):
             groupCount += 1
             print(f"\ncollecting contacts from group {groupCount} ... \n")
 
-            # The list is loaded each 25 itens because of page size
-            group = WebDriverWait(driver, 30).until(EC.presence_of_all_elements_located((By.XPATH, "(//div[@class='x10l6tqk xh8yej3 x1g42fcv'])")))
+            # The list is loaded through groups
+            group = WebDriverWait(driver, 30).until(
+                EC.visibility_of_all_elements_located((By.XPATH, "//div[@class='x10l6tqk xh8yej3 x1g42fcv']"))
+            )
             contactsAmount = len(group)
             print(f"contacts in this group: {contactsAmount}")
         except Exception as e:
@@ -111,10 +112,15 @@ def build(driver):
             except:
                 print("❌ unable to interact with contact")
                 errors.append("unable to interact with contact")
-                continue
+                validGroup = False
+                break
+
+            # Means I reached the last contact of the group successfuly
+            if i == (contactsAmount - 1):
+                validGroup = True
 
             # Check for stop condition
-            if name == "MESSAGES":
+            if name == "MESSAGES" or name == "mensagens":
                 # Signalize the end of the loop
                 end = True
                 print("MESSAGES found, stop looking for other contacts")
@@ -137,25 +143,22 @@ def build(driver):
                 equalNames.append(name)
                 print(f" {i} - {name} already on list")
 
+        
+        # Try again cause the group didnt work
+        if validGroup == False:
+            continue
+
         # Quit the loop
         if end:
             print("End of contacts reached.")
             break
 
-        # Get ready for the next iteration
-        if groupCount == 1:
-            #scroll_amount = 72 * (contactsAmount + 2)
-            scroll_amount = 72 * (contactsAmount + 1) # Repeat
-        else:
-            #scroll_amount = 72 * (contactsAmount - 1)
-            scroll_amount = 72 * (contactsAmount - 2) # Repeat
+        #scroll_amount = 72 * (contactsAmount - 2) # Repeat
+        scroll_amount = 72 * (contactsAmount - 1) 
         utils.scroll_inside_div_js(driver, scroll_amount)
 
         # Wait for the DOM to make this instance stale, giving room for the new one
         WebDriverWait(driver, 30).until(EC.staleness_of(group[0]))
         print("Old group become stale, looking for new one...")
-
-        # for the second iteration and on, thats the scroll amount
-        #scroll_amount= 72 * 24
 
     return addedContacts, removedContacts, errors, equalNames

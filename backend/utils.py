@@ -14,7 +14,7 @@ def search(filter, driver):
         # Clear the search field and type the filter
         ActionChains(driver).key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).perform()
         search_field.send_keys(Keys.BACKSPACE + filter) 
-        print(f"\n ✅ Search {filter}")
+        print(f"\n Search {filter}")
     except:
         print(f"\n ❌ Search {filter}")
         raise
@@ -26,7 +26,7 @@ def scroll_inside_div_js(driver, scroll_amount):
 
         # scroll
         driver.execute_script("arguments[0].scrollTop += arguments[1];",div_element,scroll_amount)
-        print("✅ scrolled down")
+        print("scrolled down")
     except:
         print("❌ scrolled down")
 
