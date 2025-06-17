@@ -6,7 +6,16 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 
-def filter(addedContacts, filter):
+def filter(addedContacts):
+    filter = input("Insira exatamente o nome do contato: ")
+    # Make sure the filter exists in the list
+    while True:
+        if filter not in addedContacts:
+            filter = input(f"{filter} não encontrado na lista de contatos, insira novamente: ")
+        else:
+            break
+    
+    # Actually filter the list
     while True:
         contact = addedContacts.pop(0)
         if contact == filter:
@@ -39,21 +48,19 @@ def message(driver, addedContacts):
                     break
 
             element.click()
-            print("select chat")
             
             # Make the input field empty
             ActionChains(driver).key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).send_keys(Keys.BACKSPACE).perform()
 
             # Select a picture on the chat
             ActionChains(driver).key_down(Keys.CONTROL).send_keys("v").key_up(Keys.CONTROL).perform()
-            print("prepare the picture")
 
             # Click the send button
-            # send_button = WebDriverWait(driver, 30).until(
-            #     EC.element_to_be_clickable((By.CSS_SELECTOR, 'div[aria-label="Send"]'))
-            # )
-            #send_button.click()
-            # print("send button click")
+            send_button = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, "//div[@role='button' and @aria-label='Enviar']"))
+            )
+            send_button.click()
+            time.sleep(2)
 
             #Type the message in the input field
             # message = "Bom dia!! Tudo bem? Estamos com condições especiais nas fibras, gostaria de saber mais?"
@@ -64,10 +71,10 @@ def message(driver, addedContacts):
             
             # Save and output progress
             i += 1
-            print(f"message contact {contact} - {i} succeded, there are {len(addedContacts)} left")
+            print(f"Mensagem para {contact} - {i} bem sucedida, {len(addedContacts)} restantes")
         except:
             # Log the error
-            print(f"❌ Error messaging contact: {contact}")
+            print(f"❌ Erro ao enviar mensagem para {contact}")
 
             # Re-add the contact to the list for retry
             addedContacts.append(contact) 
@@ -83,11 +90,6 @@ def build(driver):
 
     # variable that determines the end of the loop
     end = False
-
-    # Scrolls to fit perfectly the "lista" contacts
-    #utils.scroll_inside_div_js(driver, 243)
-    utils.scroll_inside_div_js(driver, 459)
-
     while not end:
         # Find the group of contacts
         try:
@@ -101,14 +103,20 @@ def build(driver):
             )
             contactsAmount = len(group)
             print(f"contacts in this group: {contactsAmount}")
+
+            distance = group[1].location['y']  - group[0].location['y']
         except Exception as e:
             print(f" ❌ unable to find a group of contacts {str(e)}")
             errors.append("unable to find a group of contacts")
         
         # Transfer the names of the group to the array
-        for i in range(0,(contactsAmount - 1)):
+        for i in range(contactsAmount):
             try:
+                # Extract the name of the contact
                 name = group[i].text.split('\n')[0].strip()
+
+                # Extract the location of the contact
+                location = group[i].location['y']
             except:
                 print("❌ unable to interact with contact")
                 errors.append("unable to interact with contact")
@@ -120,14 +128,14 @@ def build(driver):
                 validGroup = True
 
             # Check for stop condition
-            if name == "MESSAGES" or name == "mensagens":
+            if name == "MESSAGES" or name == "Mensagens":
                 # Signalize the end of the loop
                 end = True
                 print("MESSAGES found, stop looking for other contacts")
                 break
 
             # Check if the contact should not be added
-            if "excluir" in name.lower() or name == "CONTACTS" or name == "CHATS":
+            if "excluir" in name.lower() or name == "CONTACTS" or name == "CHATS" or name.lower() == "conversas":
                 # Show the contact that will be skipped
                 print(f"{i} - skipping contact: {name}")
 
@@ -138,12 +146,11 @@ def build(driver):
             # Add the contact to the array only if its new
             if name not in addedContacts:
                 addedContacts.append(name)    
-                print(f" {i} - {name} added")
+                print(f" {i} - {name} added at {location}")
             else:
                 equalNames.append(name)
-                print(f" {i} - {name} already on list")
+                print(f" {i} - {name} already on list at {location}")
 
-        
         # Try again cause the group didnt work
         if validGroup == False:
             continue
@@ -153,8 +160,11 @@ def build(driver):
             print("End of contacts reached.")
             break
 
-        #scroll_amount = 72 * (contactsAmount - 2) # Repeat
-        scroll_amount = 72 * (contactsAmount - 1) 
+        # Scroll down to the next group of contacts
+        if groupCount == 1:
+            scroll_amount = distance * (contactsAmount + 7)
+        else:
+            scroll_amount = distance * (contactsAmount) 
         utils.scroll_inside_div_js(driver, scroll_amount)
 
         # Wait for the DOM to make this instance stale, giving room for the new one
