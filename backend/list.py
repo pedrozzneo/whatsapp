@@ -128,7 +128,7 @@ def build(driver):
                 validGroup = True
 
             # Check for stop condition
-            if name == "MESSAGES" or name == "Mensagens":
+            if name.lower() == "messages" or name.lower() == "mensagens":
                 # Signalize the end of the loop
                 end = True
                 print("MESSAGES found, stop looking for other contacts")
@@ -153,6 +153,7 @@ def build(driver):
 
         # Try again cause the group didnt work
         if validGroup == False:
+            groupCount -= 1
             continue
 
         # Quit the loop
@@ -171,4 +172,5 @@ def build(driver):
         WebDriverWait(driver, 30).until(EC.staleness_of(group[0]))
         print("Old group become stale, looking for new one...")
 
+    print("returning")
     return addedContacts, removedContacts, errors, equalNames
