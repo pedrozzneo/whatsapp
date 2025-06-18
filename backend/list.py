@@ -59,7 +59,7 @@ def message(driver, addedContacts):
             send_button = WebDriverWait(driver, 10).until(
                 EC.element_to_be_clickable((By.XPATH, "//div[@role='button' and @aria-label='Enviar']"))
             )
-            send_button.click()
+            #send_button.click()
             time.sleep(2)
 
             #Type the message in the input field
@@ -135,7 +135,7 @@ def build(driver):
                 break
 
             # Check if the contact should not be added
-            if "excluir" in name.lower() or name == "CONTACTS" or name == "CHATS" or name.lower() == "conversas":
+            if "excluir" in name.lower() or name.lower() == "contacts" or name.lower() == "chats" or name.lower() == "conversas":
                 # Show the contact that will be skipped
                 print(f"{i} - skipping contact: {name}")
 
