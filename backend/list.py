@@ -137,7 +137,7 @@ def build(driver):
                 break
 
             # Check if the contact should not be added
-            if "excluir" in name.lower() or name.lower() == "contacts" or name.lower() == "chats" or name.lower() == "conversas":
+             if "excluir" in name.lower() or "mec med" in name.lower() or name.lower() == "contacts" or name.lower() == "chats" or name.lower() == "conversas" or "fibra" not in name.lower():
                 # Show the contact that will be skipped
                 print(f"{i} - skipping contact: {name}")
 
