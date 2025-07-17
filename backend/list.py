@@ -57,10 +57,16 @@ def message(driver, addedContacts):
             # Select a picture on the chat
             ActionChains(driver).key_down(Keys.CONTROL).send_keys("v").key_up(Keys.CONTROL).perform()
 
-            # Click the send button
-            send_button = WebDriverWait(driver, 10).until(
-                EC.element_to_be_clickable((By.XPATH, "//div[@role='button' and @aria-label='Enviar']"))
+            # Click the send button in PT
+            # send_button = WebDriverWait(driver, 5).until(
+            #     EC.element_to_be_clickable((By.XPATH, "//div[@role='button' and @aria-label='Enviar']"))
+            # )
+        
+            # Click the send button in EN
+            send_button = WebDriverWait(driver, 5).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, 'div[aria-label="Send"]'))
             )
+
             send_button.click()
             time.sleep(2)
 
@@ -137,7 +143,7 @@ def build(driver):
                 break
 
             # Check if the contact should not be added
-             if "excluir" in name.lower() or "mec med" in name.lower() or name.lower() == "contacts" or name.lower() == "chats" or name.lower() == "conversas" or "fibra" not in name.lower():
+            if "excluir" in name.lower() or "mec med" in name.lower() or name.lower() == "contacts" or name.lower() == "chats" or name.lower() == "conversas" or "fibra" not in name.lower():
                 # Show the contact that will be skipped
                 print(f"{i} - skipping contact: {name}")
 
