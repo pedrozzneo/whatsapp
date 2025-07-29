@@ -25,12 +25,14 @@ def filter(addedContacts):
 def message(driver, addedContacts):
     i = 0
     while addedContacts != []:
+        time.sleep(10)
         try:
             # Get the first contact in the list
             contact = addedContacts.pop(0)
 
             # Search for the contact
             utils.search(contact, driver)
+            time.sleep(10)
 
             # Find the right contact reference and click it
             reference = 2
@@ -49,7 +51,7 @@ def message(driver, addedContacts):
                     break
 
             element.click()
-            time.sleep(2)
+            time.sleep(10)
 
             # Make the input field empty
             ActionChains(driver).key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).send_keys(Keys.BACKSPACE).perform()
@@ -62,7 +64,7 @@ def message(driver, addedContacts):
                 EC.element_to_be_clickable((By.XPATH, "//div[@role='button' and @aria-label='Enviar']"))
             )
             send_button.click()
-            time.sleep(2)
+            time.sleep(20)
 
             #Type the message in the input field
             # message = "Bom dia!! Tudo bem? Estamos com condições especiais nas fibras, gostaria de saber mais?"
@@ -93,6 +95,7 @@ def build(driver):
     # variable that determines the end of the loop
     end = False
     while not end:
+        time.sleep(3)
         # Find the group of contacts
         try:
             # log
@@ -137,7 +140,7 @@ def build(driver):
                 break
 
             # Check if the contact should not be added
-            if "excluir" in name.lower() or name.lower() == "contacts" or name.lower() == "chats" or name.lower() == "conversas":
+            if "excluir" in name.lower() or name.lower() == "contacts" or name.lower() == "chats" or name.lower() == "conversas" or "mec med" in name.lower():
                 # Show the contact that will be skipped
                 print(f"{i} - skipping contact: {name}")
 
