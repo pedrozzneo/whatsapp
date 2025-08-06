@@ -9,10 +9,12 @@ driver.get("https://web.whatsapp.com")
 
 # Filter "lista" contacts until it's successfull
 success = False
+time.sleep(500)
 while not success:
     try:
         utils.search("fibra", driver)
         success = True
+        time.sleep(10)
     except:
         continue
 
