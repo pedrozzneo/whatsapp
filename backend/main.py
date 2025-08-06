@@ -8,6 +8,7 @@ driver = d.set()
 driver.get("https://web.whatsapp.com")
 
 # Filter "lista" contacts until it's successfull
+time.sleep(100)
 success = False
 while not success:
     try:
