@@ -8,6 +8,7 @@ from selenium.webdriver.common.keys import Keys
 
 def filter(addedContacts):
     filter = input("Insira exatamente o nome do contato ou 0 para sair: ")
+    # filter = "name"
     
     if(filter == "0"):
         return
@@ -28,8 +29,8 @@ def filter(addedContacts):
 
 def message(driver, addedContacts):
     i = 0
-    while addedContacts != [] and i <= 150:
-        time.sleep(10)
+    while addedContacts != [] and i < 200:
+        time.sleep(12)
         try:
             # Get the first contact in the list
             contact = addedContacts.pop(0)
@@ -55,7 +56,7 @@ def message(driver, addedContacts):
                     break
 
             element.click()
-            time.sleep(10)
+            time.sleep(11)
 
             # Make the input field empty
             ActionChains(driver).key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).send_keys(Keys.BACKSPACE).perform()
@@ -63,24 +64,28 @@ def message(driver, addedContacts):
             # Select a picture on the chat
             ActionChains(driver).key_down(Keys.CONTROL).send_keys("v").key_up(Keys.CONTROL).perform()
 
-           # Click the send button in PT
-            # send_button = WebDriverWait(driver, 5).until(
-            #     EC.element_to_be_clickable((By.XPATH, "//div[@role='button' and @aria-label='Enviar']"))
-            # )
-        
-            # Click the send button in EN
-            send_button = WebDriverWait(driver, 5).until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR, 'div[aria-label="Send"]'))
-            )
+            time.sleep(7)
+
+            #Click the send button in PT
+            try:
+                send_button = WebDriverWait(driver, 5).until(
+                    EC.element_to_be_clickable((By.XPATH, "//div[@aria-label='Enviar']"))
+                )
+            except:
+                # Click the send button in EN
+                send_button = WebDriverWait(driver, 5).until(
+                    EC.element_to_be_clickable((By.CSS_SELECTOR, 'div[aria-label="Send"]'))
+                )
+
             send_button.click()
-            time.sleep(20)
+            time.sleep(8)
 
             #Type the message in the input field
             # message = "Bom dia!! Tudo bem? Estamos com condições especiais nas fibras, gostaria de saber mais?"
             # ActionChains(driver).send_keys(message).perform()
 
-            #Send the message
-            #ActionChains(driver).send_keys(Keys.RETURN).perform()
+            # Send the message
+            # ActionChains(driver).send_keys(Keys.RETURN).perform()
             
             # Save and output progress
             i += 1
@@ -103,6 +108,7 @@ def build(driver):
 
     # variable that determines the end of the loop
     end = False
+    #or addedContacts.length <= 200
     while not end:
         time.sleep(3)
         # Find the group of contacts
@@ -169,6 +175,10 @@ def build(driver):
         if validGroup == False:
             groupCount -= 1
             continue
+
+
+        # REMOVE THAT REMOVE THAT REMOVE THAT REMOVE THAT REMOVE THAT REMOVE THAT REMOVE THAT REMOVE THAT REMOVE THAT REMOVE THAT REMOVE THAT REMOVE THAT REMOVE THAT REMOVE THAT REMOVE THAT THAT REMOVE THAT THAT REMOVE THAT THAT REMOVE THAT THAT REMOVE THAT THAT REMOVE THAT THAT REMOVE THAT 
+        # end = True
 
         # Quit the loop
         if end:
