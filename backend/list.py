@@ -6,12 +6,13 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 
-def filter(addedContacts):
-    filter = input("Insira exatamente o nome do contato ou 0 para sair: ")
-    # filter = "name"
-    
-    if(filter == "0"):
-        return
+def filter(addedContacts, profile):
+    if profile == "thiago":
+        filter = "Jana Clínica Giselle Oliveira Fibra Otica" 
+    elif profile == "pedro":
+        filter = "Charles Esteves Fibra Otica"
+    elif profile == "flavia":
+        filter = "Amanda Machado Fibra Otica" 
     
     # Make sure the filter exists in the list
     while True:
@@ -19,6 +20,9 @@ def filter(addedContacts):
             filter = input(f"{filter} não encontrado na lista de contatos, insira novamente: ")
         else:
             break
+    
+    # if filter in addedContacts:
+    #     return addedContacts[addedContacts.index(filter)]
     
     # Actually filter the list
     while True:
