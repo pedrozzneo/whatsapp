@@ -52,4 +52,4 @@ utils.show(addedContacts, removedContacts, errors, equalNames)
 #         print("Resposta inválida. Por favor, digite \"sim\" quando copiar \n")
 
 # Message each contact
-list.message(driver, addedContacts)  
+list.message(driver, addedContacts, profile)  

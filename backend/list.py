@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 import utils
 import time
+import clipboard
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -31,7 +32,7 @@ def filter(addedContacts, profile):
             addedContacts.append(contact)
             return addedContacts
 
-def message(driver, addedContacts):
+def message(driver, addedContacts, profile):
     i = 0
     while addedContacts != [] and i < 200:
         time.sleep(12)
@@ -64,6 +65,9 @@ def message(driver, addedContacts):
 
             # Make the input field empty
             ActionChains(driver).key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).send_keys(Keys.BACKSPACE).perform()
+
+            # Copy the image
+            clipboard.imageToClipboard(fr"C:\Users\nikao\Documents\Code\fibras\Images\{profile}")
 
             # Select a picture on the chat
             ActionChains(driver).key_down(Keys.CONTROL).send_keys("v").key_up(Keys.CONTROL).perform()
