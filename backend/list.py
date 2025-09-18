@@ -1,7 +1,6 @@
 from selenium.webdriver.common.by import By
 import utils
 import time
-import clipboard
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -67,7 +66,7 @@ def message(driver, addedContacts, profile):
             ActionChains(driver).key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).send_keys(Keys.BACKSPACE).perform()
 
             # Copy the image
-            clipboard.imageToClipboard(fr"C:\Users\nikao\Documents\Code\fibras\Images\{profile}")
+            utils.imageToClipboard(fr"C:\Users\nikao\Documents\Code\fibras\Images\{profile}")
 
             # Select a picture on the chat
             ActionChains(driver).key_down(Keys.CONTROL).send_keys("v").key_up(Keys.CONTROL).perform()
