@@ -83,5 +83,6 @@ def imageToClipboard(folder_path):
     win32clipboard.CloseClipboard()
 
     print(f"Imagem '{images[0]}' copiada para a área de transferência!")
+    time.sleep(5)
 
     

@@ -5,22 +5,21 @@ import list
 import time
 from datetime import datetime
 
-# Espera dar 07:00 para iniciar a aplicação
-# while True:
-#     agora = datetime.now()
-#     if agora.hour >= 7 and agora.hour <= 16:
-#         break
-#     time.sleep(60)  
+#Espera dar 07:00 para iniciar a aplicação
+while True:
+    agora = datetime.now()
+    if agora.hour >= 8 and agora.hour <= 16:
+        break
+    time.sleep(60)  
 
-# profile = "thiago"
-profile = "pedro"
+profile = "thiago"
+# profile = "pedro"
 # profile = "flavia"
 
 # Set chrome driver and open whatsapp
 driver = d.set(profile)
 driver.get("https://web.whatsapp.com")
-
-time.sleep(100)
+time.sleep(200)
 
 # Filter "lista" contacts until it's successfull
 success = False
@@ -28,6 +27,7 @@ while not success:
     try:
         utils.search("fibra", driver)
         success = True
+        time.sleep(140)
     except:
         continue
 
@@ -36,8 +36,6 @@ addedContacts, removedContacts, errors, equalNames= list.build(driver)
 
 # Print them
 utils.show(addedContacts, removedContacts, errors, equalNames)
-
-time.sleep(5)
 
 # Start with a specific contact
 addedContacts = list.filter(addedContacts, profile)
